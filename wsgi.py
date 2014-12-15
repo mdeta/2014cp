@@ -137,33 +137,29 @@ template = """
 </html>
 """
 #@+node:lee.20141212201841.4: ** class Final
-
-
 class Final(object):
     #@+others
     #@+node:lee.20141212201841.13: *3* _cp_config
     _cp_config = {
 
-        'tools.encode.encoding': 'utf-8',
-        'tools.sessions.on': True,
-        'tools.sessions.storage_type': 'file',
-        'tools.sessions.locking': 'early',
-        'tools.sessions.storage_path': tmp_dir,
-
-        'tools.sessions.timeout': 60,
+        'tools.encode.encoding': 'utf-8',    
+        'tools.sessions.on' : True,
+        'tools.sessions.storage_type' : 'file',
+        'tools.sessions.locking' : 'early',
+        'tools.sessions.storage_path' : tmp_dir,
+        
+        'tools.sessions.timeout' : 60,
     }
     #@+node:lee.20141212201841.5: *3* def index
-
     @cherrypy.expose
     def index(self):
         return self.use_template("""<h1>hello world</h1>""")
     #@+node:lee.20141212201841.6: *3* def asciiImage
-
     def asciiImage(self, inp):
         if inp == '':
             return ''
         row = 9
-
+        
         content = ""
 
         for r in range(row):
@@ -173,7 +169,6 @@ class Final(object):
             content += "<br />"
         return content
     #@+node:lee.20141212201841.11: *3* def asciiForm
-
     @cherrypy.expose
     def asciiForm(self):
         # form, action to asciiOutput
@@ -186,13 +181,11 @@ class Final(object):
         """
         return self.use_template(content)
     #@+node:lee.20141212201841.8: *3* def asciiOutput
-
     @cherrypy.expose
     def asciiOutput(self, text):
         # output asciiImage
         return self.use_template(self.asciiImage(text))
     #@+node:lee.20141212201841.10: *3* def use_template
-
     def use_template(self, content):
         start = """
     <html lang="en">
@@ -293,13 +286,13 @@ class Final(object):
         """
         Links = ""
         for Link, Name in self.link():
-            Links += '<li><a href="%s">%s</a></li>' % (Link, Name)
+            Links += '<li><a href="%s">%s</a></li>'%(Link, Name)
         rest_start = """
             </ul>
         </nav>
         <div id="content">
         """
-
+        
         end = """
          </div>
         </body>
@@ -307,7 +300,6 @@ class Final(object):
         """
         return start + Links + rest_start + content + end
     #@+node:lee.20141212201841.12: *3* def guessForm
-
     @cherrypy.expose
     def guessForm(self, guessNumber=None):
         # get count from session
@@ -366,18 +358,89 @@ class Final(object):
                 # throw bigger than guessNumber
                 return self.use_template("<h1>" + message["bigger"] + "</h1>" + form)
     #@+node:lee.20141212201841.14: *3* def link
-
     def link(self):
-        aviable_link = [("asciiForm", "使用圖案印出字"), ("guessForm", "猜數字"),
-                        ("https://github.com/mdeta/2014cp", "github repo")]
+        aviable_link = [("asciiForm", "使用圖案印出字"), ("guessForm", "猜數字"), ("https://github.com/mdeta/2014cp", "github repo"), ("weblink", "Creo web/link")]
         return aviable_link
+    #@+node:lee.20141215164031.43: *3* def weklink
+    @cherrypy.expose
+    def weblink(self):
+        return """
+    <script type="text/javascript" src="/static/weblink/pfcUtils.js"></script>
+    <script type="text/javascript" src="/static/weblink/wl_header.js">
+        document.writeln("Error loading Pro/Web.Link header!");
+    </script>
+    <script type="text/javascript" language="JavaScript">
+        if (!pfcIsWindows()) netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+        // 若第三輸入為 false, 表示僅載入 session, 但是不顯示
+        // ret 為 model open return
+        var ret = document.pwl.pwlMdlOpen("cube.prt", "v:/tmp", false);
+        if (!ret.Status) {
+            alert("pwlMdlOpen failed (" + ret.ErrorCode + ")");
+        }
+        //將 ProE 執行階段設為變數 session
+        var session = pfcGetProESession();
+        // 在視窗中打開零件檔案, 並且顯示出來
+        var window = session.OpenFile(pfcCreate("pfcModelDescriptor").CreateFromFileName("cube.prt"));
+        var solid = session.GetModel("cube.prt",pfcCreate("pfcModelType").MDL_PART);
+        var length,width,myf,myn,i,j,volume,count,d1Value,d2Value;
+        // 將模型檔中的 length 變數設為 javascript 中的 length 變數
+        a1 = solid.GetParam("a1");
+        // 將模型檔中的 width 變數設為 javascript 中的 width 變數
+        //改變零件尺寸
+        //myf=20;
+        //myn=20;
+        volume=0;
+        count=0;
+        try
+        {
+            // 以下採用 URL 輸入對應變數
+            //createParametersFromArguments ();
+            // 以下則直接利用 javascript 程式改變零件參數
+            for(i=0;i<=5;i++)
+            {
+                myf=100.0;
+                // 設定變數值, 利用 ModelItem 中的 CreateDoubleParamValue 轉換成 Pro/Web.Link 所需要的浮點數值
+                a1_Value = pfcCreate ("MpfcModelItem").CreateDoubleParamValue(myf + i * 10);
+                // 將處理好的變數值, 指定給對應的零件變數
+                a1.Value = a1_Value;
+                //零件尺寸重新設定後, 呼叫 Regenerate 更新模型
+                solid.Regenerate(void null);
+                //利用 GetMassProperty 取得模型的質量相關物件
+                properties = solid.GetMassProperty(void null);
+                //volume = volume + properties.Volume;
+                volume = properties.Volume;
+                count = count + 1;
+                alert("執行第"+count+"次,零件總體積:"+volume);
+                // 將零件存為新檔案
+                var newfile = document.pwl.pwlMdlSaveAs("cube.prt", "v:/tmp", "cube"+count+".prt");
+                if (!newfile.Status) {
+                    alert("pwlMdlSaveAs failed (" + newfile.ErrorCode + ")");
+                }
+            }
+            //alert("共執行:"+count+"次,零件總體積:"+volume);
+            //alert("零件體積:"+properties.Volume);
+            //alert("零件體積取整數:"+Math.round(properties.Volume));
+        }
+        catch(err)
+        {
+            alert ("Exception occurred: "+pfcGetExceptionType (err));
+        }
+    </script>
+        """
     #@-others
 #@+node:lee.20141212201841.3: ** run env
+application_conf = {
+    '/static':{
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': _curdir+"/static"
+    },
+}
+
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     # 在 openshift
-    application = cherrypy.Application(Final())
+    application = cherrypy.Application(Final(), config = application_conf)
 else:
     # 在其他環境下執行
-    cherrypy.quickstart(Final())
+    cherrypy.quickstart(Final(), config = application_conf)
 #@-others
 #@-leo
