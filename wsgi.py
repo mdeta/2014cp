@@ -292,8 +292,8 @@ class Final(object):
                 <li><a href="/">Home</a></li>
         """
         Links = ""
-        for L in self.link():
-            Links += '<li><a href="/%s">%s</a></li>' % (L, L)
+        for Link, Name in self.link():
+            Links += '<li><a href="%s">%s</a></li>' % (Link, Name)
         rest_start = """
             </ul>
         </nav>
@@ -368,7 +368,8 @@ class Final(object):
     #@+node:lee.20141212201841.14: *3* def link
 
     def link(self):
-        aviable_link = ["asciiForm", "guessForm"]
+        aviable_link = [("asciiForm", "使用圖案印出字"), ("guessForm", "猜數字"),
+                        ("https://github.com/mdeta/2014cp", "github repo")]
         return aviable_link
     #@-others
 #@+node:lee.20141212201841.3: ** run env
