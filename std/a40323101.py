@@ -7,24 +7,32 @@
 import cherrypy
 import random
 from symbol import *
-from jinja2 import Environment, FileSystemLoader
-
-env = Environment(loader=FileSystemLoader('templates'))
+#from jinja2 import Environment, FileSystemLoader
+import sys
+sys.path.append("..")
+import wsgi
+env = wsgi.env
+#env = Environment(loader=FileSystemLoader('templates'))
 #@-<<decorations>>
 
 #@+others
 #@+node:lee.20141215164031.96: ** class Application
+
+
 class Application(object):
     #@+others
     #@+node:lee.20141215164031.97: *3* def get_nav
+
     def get_nav(self):
         """
         取得 nav link
         """
         #(URL 路徑, anchor name)
-        anchors = [('index', 'home'), ('guessForm', '猜數字'), ('multipliedTable', '乘法表'), ('asciiForm', '使用圖案印出字'), ('https://github.com/mdeta/2014cp', 'github repository'), ('/', 'back to list')]
+        anchors = [('index', 'home'), ('guessForm', '猜數字'), ('multipliedTable', '乘法表'), ('asciiForm',
+                                                                                         '使用圖案印出字'), ('https://github.com/mdeta/2014cp', 'github repository'), ('/', 'back to list')]
         return anchors
     #@+node:lee.20141215164031.98: *3* def index
+
     @cherrypy.expose
     def index(self):
         """
@@ -32,23 +40,23 @@ class Application(object):
         """
         tmpl = env.get_template('personal_page.html')
         extra_content = {
-            'title':'personal page',
-            'photo_url':'http://placekitten.com/g/350/300',
-            'name':'Lee',
-            'ID':'123456789',
-            'class':'nfu',
-            'anchors':self.get_nav(),
-            'self_evaluations':[('Porject7', 80), ('Porject8', 90), ('Porject9', 100)]
+            'title': 'personal page',
+            'photo_url': 'http://placekitten.com/g/350/300',
+            'name': 'Lee',
+            'ID': '123456789',
+            'class': 'nfu',
+            'anchors': self.get_nav(),
+            'self_evaluations': [('Porject7', 80), ('Porject8', 90), ('Porject9', 100)]
         }
         return tmpl.render(extra_content)
 
     #@+node:lee.20141215164031.99: *3* def guessForm
     @cherrypy.expose
     def guessForm(self, guessNumber=None):
-        
+
         # get template
         tmpl = env.get_template('form.html')
-        
+
         form = """
         <form action="" method="get">
           <label for="guessNumber">Guess Number(1~99)</label>
@@ -56,10 +64,11 @@ class Application(object):
           <input type="submit" value="Send" class="button button-primary">
         </form>
         """
-        
+
         # set common content
-        extra_content = {'title':'guessform', 'form':form, 'anchors':self.get_nav()}
-        
+        extra_content = {
+            'title': 'guessform', 'form': form, 'anchors': self.get_nav()}
+
         # get count from session
         count = cherrypy.session.get("count", None)
         # if is None, it mean it does not exist
@@ -73,8 +82,6 @@ class Application(object):
         if not answer:
             # create one
             answer = cherrypy.session["answer"] = random.randint(1, 100)
-
-
 
         message = {
             "welcome": "guess a number from 1 to 99",
@@ -106,7 +113,8 @@ class Application(object):
                 del cherrypy.session["answer"]
                 # throw successful
                 extra_content['form'] = ''
-                extra_content['output'] = message["successful"]+'<a href="guessForm">play again</a>'
+                extra_content['output'] = message[
+                    "successful"] + '<a href="guessForm">play again</a>'
             elif guessNumber > answer:
                 # throw small than guessNumber
                 extra_content['output'] = message["smaller"]
@@ -115,6 +123,7 @@ class Application(object):
                 extra_content['output'] = message["bigger"]
             return tmpl.render(extra_content)
     #@+node:lee.20141215164031.100: *3* def multipliedTable
+
     @cherrypy.expose
     def multipliedTable(self, first=None, second=None):
         tmpl = env.get_template('form.html')
@@ -154,12 +163,13 @@ class Application(object):
         extra_content['output'] = '<p>' + output + '</p>'
         return tmpl.render(extra_content)
     #@+node:lee.20141215164031.101: *3* def asciiForm
+
     @cherrypy.expose
     def asciiForm(self, text=None):
         tmpl = env.get_template('form.html')
-        
+
         messages = {
-            'welcome':'welcome to ascii form',
+            'welcome': 'welcome to ascii form',
         }
         form = """
         <form method="get" action="">
@@ -170,18 +180,19 @@ class Application(object):
         """
         extra_content = {
             'title': 'asciiForm', 'form': form, 'anchors': self.get_nav()}
-        
+
         if text is None:
             extra_content['output'] = messages.get('welcome')
         else:
             extra_content['output'] = self.asciiImage(text)
         return tmpl.render(extra_content)
     #@+node:lee.20141215164031.102: *3* def asciiImage
+
     def asciiImage(self, inp):
         if inp == '':
             return ''
         row = 9
-        
+
         content = ""
 
         for r in range(row):

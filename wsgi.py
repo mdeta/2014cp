@@ -27,11 +27,11 @@ if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     std_dir = os.environ['OPENSHIFT_REPO_DIR'] + 'std/'
 else:
     # 表示程式在近端執行
-    data_dir = _curdir + "local_data/"
-    templates_dir = _curdir + "templates"
-    tmp_dir = data_dir + 'tmp'
-    static_dir = _curdir + 'static'
-    std_dir = _curdir + 'std/'
+    data_dir = _curdir + "/local_data/"
+    templates_dir = _curdir + "/templates"
+    tmp_dir = data_dir + '/tmp'
+    static_dir = _curdir + '/static'
+    std_dir = _curdir + '/std/'
 
 env = Environment(loader=FileSystemLoader(templates_dir))
 
