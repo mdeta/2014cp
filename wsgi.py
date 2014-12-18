@@ -24,12 +24,14 @@ if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     tmp_dir = data_dir + 'tmp'
     templates_dir = os.environ['OPENSHIFT_REPO_DIR'] + 'templates'
     static_dir = os.environ['OPENSHIFT_REPO_DIR'] + 'static'
+    std_dir = os.environ['OPENSHIFT_REPO_DIR'] + 'std/'
 else:
     # 表示程式在近端執行
     data_dir = _curdir + "local_data/"
     templates_dir = _curdir + "templates"
     tmp_dir = data_dir + 'tmp'
-    static_dir = _curdir + "static"
+    static_dir = _curdir + 'static'
+    std_dir = _curdir + 'std/'
 
 env = Environment(loader=FileSystemLoader(templates_dir))
 
@@ -80,8 +82,8 @@ import imp
 for i in range(1, 58):
     try:
         mod = imp.load_source(
-            "a403231%02d" % i, _curdir + "std/a403231%02d.py" % i)
-        setattr(root, "403231%02d" % i, mod.Application())
+            'a403231%02d' % i, std_dir + 'a403231%02d.py' % i)
+        setattr(root, '403231%02d' % i, mod.Application())
     except:
         pass
 
