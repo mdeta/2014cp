@@ -24,9 +24,11 @@ if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     tmp_dir = data_dir + 'tmp'
 else:
     # 表示程式在近端執行
-    data_dir = _curdir + "/local_data/"
+    data_dir = _curdir + "local_data/"
 
 tmp_dir = data_dir + 'tmp'
+env = Environment(loader=FileSystemLoader(_curdir + 'templates'))
+print(_curdir)
 
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
@@ -34,19 +36,22 @@ if not os.path.exists(data_dir):
 if not os.path.exists(tmp_dir):
     os.makedirs(tmp_dir)
 #@+node:lee.20141215164031.50: ** class Final
+
+
 class Final(object):
     #@+others
     #@+node:lee.20141215164031.51: *3* _cp_config
     _cp_config = {
 
-        'tools.encode.encoding': 'utf-8',    
-        'tools.sessions.on' : True,
-        'tools.sessions.storage_type' : 'file',
-        'tools.sessions.locking' : 'early',
-        'tools.sessions.storage_path' : tmp_dir,
-        'tools.sessions.timeout' : 60,
+        'tools.encode.encoding': 'utf-8',
+        'tools.sessions.on': True,
+        'tools.sessions.storage_type': 'file',
+        'tools.sessions.locking': 'early',
+        'tools.sessions.storage_path': tmp_dir,
+        'tools.sessions.timeout': 60,
     }
     #@+node:lee.20141215164031.52: *3* def index
+
     @cherrypy.expose
     def index(self):
         tmpl = env.get_template('index.html')
@@ -54,6 +59,8 @@ class Final(object):
         return tmpl.render(title='index', students=std_list)
     #@-others
 #@+node:lee.20141215164031.86: ** def error_page_404
+
+
 def error_page_404(status, message, traceback, version):
     tmpl = env.get_template('404.html')
     return tmpl.render(title='404')
@@ -69,29 +76,30 @@ import imp
 
 for i in range(1, 58):
     try:
-        mod = imp.load_source("a403231%02d"%i, _curdir +"std/a403231%02d.py"%i)
-        setattr(root, "403231%02d"%i, mod.Application())
+        mod = imp.load_source(
+            "a403231%02d" % i, _curdir + "std/a403231%02d.py" % i)
+        setattr(root, "403231%02d" % i, mod.Application())
     except:
         pass
 
 application_conf = {
-    '/static':{
+    '/static': {
         'tools.staticdir.on': True,
-        'tools.staticdir.dir': _curdir+"/static"
+        'tools.staticdir.dir': _curdir + "static"
     },
-     # 設定靜態 templates 檔案目錄對應
-    '/templates':{
+    # 設定靜態 templates 檔案目錄對應
+    '/templates': {
         'tools.staticdir.on': True,
-        'tools.staticdir.dir': _curdir + '/templates',
-        'tools.staticdir.index' : 'index.htm'
+        'tools.staticdir.dir': _curdir + 'templates',
+        'tools.staticdir.index': 'index.htm'
     },
 }
 
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     # 在 openshift
-    application = cherrypy.Application(root, config = application_conf)
+    application = cherrypy.Application(root, config=application_conf)
 else:
     # 在其他環境下執行
-    cherrypy.quickstart(root, config = application_conf)
+    cherrypy.quickstart(root, config=application_conf)
 #@-others
 #@-leo
