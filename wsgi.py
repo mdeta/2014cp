@@ -11,7 +11,7 @@ from symbol import *
 import random
 from jinja2 import Environment, FileSystemLoader
 
-env = Environment(loader=FileSystemLoader('templates'))
+
 #@-<<decorations>>
 
 #@+others
@@ -22,13 +22,16 @@ if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     # 表示程式在雲端執行
     data_dir = os.environ['OPENSHIFT_DATA_DIR']
     tmp_dir = data_dir + 'tmp'
+    templates_dir = os.environ['OPENSHIFT_REPO_DIR'] + 'templates'
+    static_dir = os.environ['OPENSHIFT_REPO_DIR'] + 'static'
 else:
     # 表示程式在近端執行
     data_dir = _curdir + "local_data/"
+    templates_dir = _curdir + "templates"
+    tmp_dir = data_dir + 'tmp'
+    static_dir = _curdir + "static"
 
-tmp_dir = data_dir + 'tmp'
-env = Environment(loader=FileSystemLoader(_curdir + 'templates'))
-print(_curdir)
+env = Environment(loader=FileSystemLoader(templates_dir))
 
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
@@ -85,12 +88,12 @@ for i in range(1, 58):
 application_conf = {
     '/static': {
         'tools.staticdir.on': True,
-        'tools.staticdir.dir': _curdir + "static"
+        'tools.staticdir.dir': static_dir
     },
     # 設定靜態 templates 檔案目錄對應
     '/templates': {
         'tools.staticdir.on': True,
-        'tools.staticdir.dir': _curdir + 'templates',
+        'tools.staticdir.dir': templates_dir,
         'tools.staticdir.index': 'index.htm'
     },
 }
