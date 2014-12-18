@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "nav.html" %}
+<div class="content">
+    <div class="row">
+      <div class="one-half column">
+        {{form}}
+      </div>
+      <div class="one-half column">
+        <div class="output u-full-width">
+          <p>Output:</p>
+          <p>
+            {{output}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

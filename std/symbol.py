@@ -1,5 +1,5 @@
 #@+leo-ver=5-thin
-#@+node:lee.20141212201841.7: * @file symbol.py
+#@+node:lee.20141215164031.61: * @file symbol.py
 #@@language python
 #@@tabwidth -4
 

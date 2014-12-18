@@ -1,0 +1,125 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin: 0 0 100px; /* bottom = footer height */
+}
+
+.navbar {
+    left: 0;
+    position: fixed;
+    top: 0;
+}
+.navbar,
+.navbar-spacer {
+    background: none repeat scroll 0 0 #F9F5FF;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    display: block;
+    height: 6.5rem;
+    width: 100%;
+    z-index: 99;
+}
+
+.navbar-list {
+    list-style: outside none none;
+    margin-bottom: 0;
+}
+
+.navbar-item {
+    float: left;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.navbar-link {
+    color: #222;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+    line-height: 6.5rem;
+    margin-right: 35px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.navbar-list {
+    list-style: outside none none;
+}
+
+.content{
+    margin-top: 6em;
+}
+
+.center{
+    text-align: center;
+}
+
+.output{
+    border: 1px solid #000;
+    border-radius: 5px;
+    height:250px;
+    overflow:auto;
+}
+
+.output > *{
+    margin-left: 20px;
+}
+
+footer {
+    background-color: #7BCDBA;
+    color:#FFF;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 50px;
+    line-height:50px;
+    width: 100%;
+    font-size: 1em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.headline{
+    font-size: 3em;
+    font-weight: 500;
+}
+
+.meta ul{
+    list-style: none;
+}
+
+.meta ul li{
+    font-size: 1.5em;
+}
+
+.wall{
+    margin-left: 5%;
+}
+
+.std { /* Masonry bricks or child elements */
+    background-color: #ECB0E1;
+    display: inline-block;
+    margin-top: 0.5em;
+    margin-left: auto;
+    width: 100%;
+    text-align: center;
+    outline: 2px solid white;
+    overflow: hidden;
+}
+
+.std a{
+    text-decoration: none;
+    color:#FFF;
+    display: block;
+    font-size: 1.5em;
+}
+
+.std:hover{
+    background-color: #DE6C83;
+    box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transform:scale(1.05);
+    z-index: 999;
+}

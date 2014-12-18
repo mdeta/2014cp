@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="headline center"><span>Students</span></div>
+    <div class="row wall">
+      {% for student in students %}
+        <div class="one-third column std"><a href="{{student}}">{{student}}</a></div>
+      {% endfor %}
+    </div>
+{% endblock content %}
+
