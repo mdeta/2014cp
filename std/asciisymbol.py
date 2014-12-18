@@ -3,6 +3,7 @@
 #@@language python
 #@@tabwidth -4
 
+
 def symbolSpace(row):
     s = [
         '■■■■■■■',
@@ -66,5 +67,20 @@ def symbol3(row):
     ]
     return s[row]
 
-symbolDict = {"1": symbol1, "2": symbol2, "3": symbol3, "":symbolSpace}
+symbolDict = {"1": symbol1, "2": symbol2, "3": symbol3, "": symbolSpace}
+
+
+def asciiImage(inp):
+    if inp == '':
+        return ''
+    row = 9
+
+    content = ""
+
+    for r in range(row):
+        for c in inp:
+            out_symbol = symbolDict.get(c, symbolDict[""])(r)
+            content += out_symbol
+        content += "<br />"
+    return content
 #@-leo

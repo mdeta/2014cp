@@ -79,13 +79,13 @@ root = Final()
 import std
 import imp
 
-for i in range(1, 58):
-    try:
-        mod = imp.load_source(
-            'a403231%02d' % i, std_dir + 'a403231%02d.py' % i)
-        setattr(root, '403231%02d' % i, mod.Application())
-    except:
-        pass
+for i in range(1, 2):
+    # try:
+    mod = imp.load_source(
+        'a403231%02d' % i, std_dir + 'a403231%02d.py' % i)
+    setattr(root, '403231%02d' % i, mod.Application())
+    # except:
+    # pass
 
 application_conf = {
     '/static': {

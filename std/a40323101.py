@@ -6,12 +6,12 @@
 #@+node:lee.20141215164031.95: ** <<decorations>>
 import cherrypy
 import random
-from symbol import *
+from std.asciisymbol import asciiImage
 #from jinja2 import Environment, FileSystemLoader
-import sys
-sys.path.append("..")
-import wsgi
-env = wsgi.env
+#import sys
+# sys.path.append("..")
+from wsgi import env
+env = env
 #env = Environment(loader=FileSystemLoader('templates'))
 #@-<<decorations>>
 
@@ -184,23 +184,10 @@ class Application(object):
         if text is None:
             extra_content['output'] = messages.get('welcome')
         else:
-            extra_content['output'] = self.asciiImage(text)
+            extra_content['output'] = asciiImage(text)
         return tmpl.render(extra_content)
     #@+node:lee.20141215164031.102: *3* def asciiImage
 
-    def asciiImage(self, inp):
-        if inp == '':
-            return ''
-        row = 9
-
-        content = ""
-
-        for r in range(row):
-            for c in inp:
-                out_symbol = symbolDict.get(c, symbolDict[""])(r)
-                content += out_symbol
-            content += "<br />"
-        return content
     #@-others
 #@-others
 #@-leo
