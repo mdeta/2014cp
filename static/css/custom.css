@@ -161,6 +161,8 @@ body {
     margin: 0 0 100px; /* bottom = footer height */
 }
 
+img, img.scale-with-grid { outline: 0; max-width: 100%; height: auto; }
+
 .nav{
     border-bottom: 0.1px solid #f1f2eb;
 }
