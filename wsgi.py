@@ -76,7 +76,6 @@ cherrypy.config.update({'error_page.404': error_page_404})
 
 root = Final()
 
-import std
 import imp
 
 for i in range(1, 2):

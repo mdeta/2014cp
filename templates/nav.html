@@ -1,9 +1,15 @@
-<nav class="navbar">
-    <div class="container">
-      <ul class="navbar-list">
-        {% for link, name in anchors %}
-            <li class="navbar-item"><a class="navbar-link" href="{{link}}">{{name}}</a></li>
-        {% endfor %}
-      </ul>
+<div class="row">
+    <div class="nav twelve columns">
+        <input type="checkbox" id="toggle" />
+        <div>
+            <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu" onclick></label>
+            <ul class="menu">
+            {% for link, name in anchors %}
+                <li><a href="{{link}}">{{name}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
     </div>
-</nav>
+</div>
+
+
