@@ -1,5 +1,5 @@
 #@+leo-ver=5-thin
-#@+node:lee.20141215164031.46: * @file application.py
+#@+node:lee.20141215164031.46: * @file wsgi.py
 #@@language python
 #@@tabwidth -4
 
@@ -10,8 +10,6 @@ import os
 from symbol import *
 import random
 from jinja2 import Environment, FileSystemLoader
-
-
 #@-<<decorations>>
 
 #@+others
@@ -40,70 +38,67 @@ if not os.path.exists(data_dir):
 
 if not os.path.exists(tmp_dir):
     os.makedirs(tmp_dir)
+#@+node:lee.20141221203113.57: ** student list
+std_list = ["403231{0:02d}".format(s) for s in range(1, 58)] + ['40323198', '40323199',]
 #@+node:lee.20141215164031.50: ** class Final
-
-
 class Final(object):
     #@+others
     #@+node:lee.20141215164031.51: *3* _cp_config
     _cp_config = {
 
-        'tools.encode.encoding': 'utf-8',
-        'tools.sessions.on': True,
-        'tools.sessions.storage_type': 'file',
-        'tools.sessions.locking': 'early',
-        'tools.sessions.storage_path': tmp_dir,
-        'tools.sessions.timeout': 60,
+        'tools.encode.encoding': 'utf-8',    
+        'tools.sessions.on' : True,
+        'tools.sessions.storage_type' : 'file',
+        'tools.sessions.locking' : 'early',
+        'tools.sessions.storage_path' : tmp_dir,
+        'tools.sessions.timeout' : 60,
     }
     #@+node:lee.20141215164031.52: *3* def index
-
     @cherrypy.expose
     def index(self):
+        # get template
         tmpl = env.get_template('index.html')
-        std_list = ["403231{0:02d}".format(s) for s in range(1, 58)]
+        # student list 40323101 - 40323157
+        # use 40323100 to demonstrate example
         return tmpl.render(title='index', students=std_list)
     #@-others
 #@+node:lee.20141215164031.86: ** def error_page_404
-
-
+# handle page 404
 def error_page_404(status, message, traceback, version):
     tmpl = env.get_template('404.html')
     return tmpl.render(title='404')
 
 cherrypy.config.update({'error_page.404': error_page_404})
-#@+node:lee.20141215164031.60: ** run env
-#from std import a40323100
-
+#@+node:lee.20141221203113.43: ** import std module to root
 root = Final()
 
 import imp
 
-for i in range(1, 2):
-    # try:
-    mod = imp.load_source(
-        'a403231%02d' % i, std_dir + 'a403231%02d.py' % i)
-    setattr(root, '403231%02d' % i, mod.Application())
-    # except:
-    # pass
-
+# import all std module, if not import success, pass
+# use student numbert to be sub path
+# e.g. 127.0.0.1/40323100/
+# if visitor visit not exsit page, raise 404
+# 40323100 - 57, 40323100 is an example page.
+for i in std_list:
+    try:
+        mod = imp.load_source(i, std_dir + 'a%s.py' % i)
+        setattr(root, i, mod.Application())
+    except:
+        pass
+#@+node:lee.20141221203113.44: ** application_conf
+# set up app conf
 application_conf = {
     '/static': {
         'tools.staticdir.on': True,
         'tools.staticdir.dir': static_dir
     },
-    # 設定靜態 templates 檔案目錄對應
-    '/templates': {
-        'tools.staticdir.on': True,
-        'tools.staticdir.dir': templates_dir,
-        'tools.staticdir.index': 'index.htm'
-    },
 }
-
+#@+node:lee.20141215164031.60: ** run env
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     # 在 openshift
-    application = cherrypy.Application(root, config=application_conf)
+    application = cherrypy.Application(root, config = application_conf)
 else:
     # 在其他環境下執行
-    cherrypy.quickstart(root, config=application_conf)
+    cherrypy.quickstart(root, config = application_conf)
 #@-others
 #@-leo
