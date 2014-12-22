@@ -4,9 +4,9 @@
         <div>
             <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu" onclick></label>
             <ul class="menu">
-            {% for link, name in anchors %}
-                <li><a href="{{link}}">{{name}}</a></li>
-            {% endfor %}
+            % for link, name in anchors:
+                <li><a href="${link}">${name}</a></li>
+            % endfor
             </ul>
         </div>
     </div>

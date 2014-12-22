@@ -1,12 +1,11 @@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>{{title}}</title>
+  <title>${title}</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -53,18 +52,13 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <!-- .container is main centered wrapper -->
 <div class="container">
-  {% block content %}
+  <%block name="content">
     this is default content
-  {% endblock content %}
+ </%block>
 </div>
 
 <footer class="center">
   2014 Computer Programming
 </footer>
-
-<!-- Note: columns can be nested, but it's not recommended since Skeleton's grid has %-based gutters, meaning a nested grid results in variable with gutters (which can end up being *really* small on certain browser/device sizes) -->
-
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>

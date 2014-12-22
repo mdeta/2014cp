@@ -9,7 +9,7 @@ import cherrypy
 import os
 from symbol import *
 import random
-from jinja2 import Environment, FileSystemLoader
+from mako.lookup import TemplateLookup
 #@-<<decorations>>
 
 #@+others
@@ -31,7 +31,7 @@ else:
     static_dir = _curdir + '/static'
     std_dir = _curdir + '/std/'
 
-env = Environment(loader=FileSystemLoader(templates_dir))
+env = TemplateLookup(directories=[templates_dir])
 
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
